@@ -5,5 +5,5 @@ author: 'Tahmid Khan'
 runs:
   using: "composite"
   steps:
-    -run: echo "$(git fetch --tags)"
-    shell: bash
+    - run: echo "Hello"
+      shell: bash
