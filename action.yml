@@ -1,0 +1,8 @@
+name: Auto Tagging
+description: 'Creates new tag with prefix "RC-". For example: RC-0.0.1'
+author: 'Tahmid Khan'
+runs:
+  using: "Docker"
+  image: "Dockerfile"
+branding:
+  icon: 'tag'
