@@ -6,6 +6,7 @@ runs:
   using: "composite"
   steps:
     - run: |
+        git fetch --tags
         tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
         latest_tag="${tag//'RC-'}"
         echo "latest tag -> $latest_tag"
