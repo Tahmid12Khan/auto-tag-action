@@ -1,0 +1,88 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Auto Tagging
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Create and Push New Tag
+        run: |
+          # get latest tag that has RC- prefix
+          git fetch --tags 
+          tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
+
+          # remove "RC-" prefix
+          latest_tag="${tag//'RC-'}"
+          echo "latest tag -> $latest_tag"
+
+          #if there is no RC tag create a new one
+          if [[ -z "$latest_tag" ]]; then
+            latest_tag='0.0.0'
+          fi
+
+          TEMP_IFS=$IFS
+          # temporary separator  
+          IFS='.'
+
+          # separate based on periods
+          read -a tag_arr <<< $latest_tag
+          IFS=$TEMP_IFS
+
+          # max_version for sub versions
+          max_sub_version=100
+
+          # max parts for the version (0 based)
+          i=2
+          version_updated=0
+
+          while [[ $i -gt 0 ]]; do
+            new_version=$((${tag_arr[$i]} + 1))
+            if [[ $new_version -lt $max_sub_version ]]; then
+              version_updated=1
+              tag_arr[$i]=$new_version
+              break
+            fi
+            tag_arr[$i]=0
+            i=$(($i - 1))
+          done
+
+          if [[ $version_updated -eq 0 ]]; then
+            tag_arr[$i]=$((${tag_arr[$i]} + 1))
+            version_updated=1
+          fi
+
+          function join_by_using_single_character { 
+            local IFS="$1" 
+            shift
+            echo "$*"
+          }
+
+
+          new_tag="RC-$(join_by_using_single_character '.' ${tag_arr[@]})"
+
+          echo "New tag -> $new_tag"
+          
+          # create and push the new tag
+          git tag $new_tag
+          git push origin $new_tag
