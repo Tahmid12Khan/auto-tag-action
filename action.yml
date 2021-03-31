@@ -5,5 +5,7 @@ author: 'Tahmid Khan'
 runs:
   using: "composite"
   steps:
-    - run: echo "Hello"
+    - run: |
+        echo "Hello"
+        echo "Hi"
       shell: bash
