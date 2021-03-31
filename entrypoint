@@ -1,3 +1,5 @@
+#!/bin/bash
+
 git fetch --tags
 tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
 
