@@ -6,6 +6,6 @@ runs:
   using: "composite"
   steps:
     - run: |
-        echo "Hello"
+        echo "$(git fetch --tags)"
         echo "Hi"
       shell: bash
