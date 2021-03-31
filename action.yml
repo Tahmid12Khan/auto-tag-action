@@ -1,6 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Auto Tagging
+description: 'Creates new tag with prefix "RC-". For example: RC-0.0.1'
 
 # Controls when the action will run. 
 on:
