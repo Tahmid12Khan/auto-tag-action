@@ -6,8 +6,11 @@ runs:
   using: "composite"
   steps:
     - run: |
+        # get latest tag that has RC- prefix
         git fetch --tags
         tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
+        
+        # remove "RC-" prefix
         latest_tag="${tag//'RC-'}"
         echo "latest tag -> $latest_tag"
       shell: bash
