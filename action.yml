@@ -5,9 +5,9 @@ author: 'Tahmid Khan'
 runs:
   using: "composite"
   steps:
-    run: |
+    - run: |
       # get latest tag that has RC- prefix
-      git fetch --tags
+      
       tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
 
       # remove "RC-" prefix
