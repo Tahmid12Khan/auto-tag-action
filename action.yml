@@ -8,7 +8,7 @@ runs:
 	steps:
 		- name: Create and Push New Tag
 		run: |
-			  # get latest tag that has RC- prefix
+			  # get latest tag that has RC- prefix 
 			  git fetch --tags 
 			  tag=$(git tag --sort=creatordate | grep -i "RC-.*" | tail -1)
 
